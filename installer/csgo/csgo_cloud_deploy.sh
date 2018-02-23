@@ -3,12 +3,11 @@
 ## Cloud Deploy Tool CSGO Server INST
 ## 2018-02-16
 
-
 ############################################## Start of Script ##############################################
 function check_root ()
 {
  if [ ! $(whoami) == "root" ]; then
-        echo "### ERROR: Start as root an try again ###"
+        echo "### ERROR: Start as root and try again ###"
         exit 1
 fi
 }
@@ -63,7 +62,6 @@ apt install -y curl debconf libc6 lib32gcc1 curl screen wget gdb
     # Clean up
     echo "### APT CleanUp ###"
 apt-get autoclean -y
-
 }
 
 function inst_vanilla_cs_srv ()
@@ -176,7 +174,6 @@ chmod +x $DEPLOY_server_inst_dir/srcds_run
 # Starting CSGO Server
 echo "### STARTING CSGO Server ###"
 screen -dmS CS_Diegle su $DEPLOY_install_user_name --shell /bin/sh -c "$DEPLOY_server_inst_dir/srcds_run -game csgo -console -autoupdate -usercon -tickrate 128 -maxplayers 10 -nobots -pingboost 3 -ip 0.0.0.0 +game_type 0 +game_mode 1 +map aim_deagle7k +exec server.cfg"
-
 }
 
 function csgo_mm ()
@@ -189,6 +186,7 @@ chmod +x $DEPLOY_server_inst_dir/srcds_run
 echo "### STARTING CSGO Server ###"
 screen -dmS CS_MM su $DEPLOY_install_user_name --shell /bin/sh -c "$DEPLOY_server_inst_dir/srcds_run -game csgo -console -autoupdate -usercon -tickrate 128 -maxplayers 10 -nobots -pingboost 3 -ip 0.0.0.0 +game_type 0 +game_mode 1 +map de_cbble +exec server.cfg"
 }
+
 ############################################## End of Functions ##############################################
 
 # Main Starts here....
@@ -198,7 +196,7 @@ check_distro
 inst_req
 inst_vanilla_cs_srv
 csgo_srv_init
-
+# Install GameTYPE
 case "$DEPLOY_GAME_TYPE" in
     1vs1)
      csgo_1vs1
