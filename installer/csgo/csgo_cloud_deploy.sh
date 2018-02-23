@@ -8,7 +8,7 @@
 function check_root ()
 {
  if [ ! $(whoami) == "root" ]; then
-        echo "Start as root an try again"
+        echo "### ERROR: Start as root an try again ###"
         exit 1
 fi
 }
@@ -17,11 +17,11 @@ function check_distro ()
 {
     if [ -x /usr/bin/lsb_release ]; then
         if [ !$DEPLOY_LSB == "Ubuntu" ] || [ !$DEPLOY_LSB == "Debian" ]; then
-          echo "Your distro isn´t supported"
+          echo "### ERROR: Your distro isn´t supported ###"
          exit 1
         fi
     else
-        echo "Your distro isn´t supported."
+        echo "### ERROR: Your distro isn´t supported. ###"
         exit 1
     fi
 }
@@ -29,56 +29,68 @@ function check_distro ()
 function inst_req ()
 {
     # System Update
+    echo "### System Update ###"
 apt update && apt upgrade -y
     # Install Req via APT
+    echo "### Install Requirements ###"
 apt install -y curl debconf libc6 lib32gcc1 curl screen wget gdb
     # Add i386
+    echo "### Add Arch i386 ###"
     dpkg --add-architecture i386
     apt update
+    echo "### Install i386 Libs ###"
     apt install -y gcc-5-base:i386 gcc-6-base:i386 libc6:i386 libgcc1:i386 libstdc++6:i386
     # Create User
     if [ ! -d $DEPLOY_server_inst_dir ]; then
         mkdir $DEPLOY_server_inst_dir
     fi
     if [[ ! $(getent passwd $DEPLOY_install_user_name) = *"$DEPLOY_install_user_name"* ]]; then
+        echo "### Add local User ###"
         useradd $DEPLOY_install_user_name -d $DEPLOY_server_inst_dir --shell /usr/sbin/nologin
     fi
     # Download SteamCMD
+    echo "### Install SteamCMD ###"
  if [ -d $DEPLOY_steamCMD ]; then
-         curl -sqL "https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz" | tar zxvf - -C $DEPLOY_steamCMD >/dev/null 2>&1
+         rm -rf $DEPLOY_steamCMD/*
+         curl -sqL "https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz" | tar zxvf - -C $DEPLOY_steamCMD
     else
         mkdir $DEPLOY_steamCMD
-        curl -sqL "https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz" | tar zxvf - -C $DEPLOY_steamCMD >/dev/null 2>&1
+        curl -sqL "https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz" | tar zxvf - -C $DEPLOY_steamCMD
  fi
     # Set User rights
+    echo "### Set User permissions ###"
     chown -cR $DEPLOY_install_user_name $DEPLOY_steamCMD && chmod -cR 770 $DEPLOY_install_user_name $DEPLOY_steamCMD
     # Clean up
+    echo "### APT CleanUp ###"
 apt-get autoclean -y
 
 }
 
 function inst_vanilla_cs_srv ()
 {
+    # Save TMP dir to VAR
     tmp_dir="$(su $DEPLOY_install_user_name --shell /bin/sh -c "mktemp -d")"
     # Download CSGO Server
     echo "### DOWNLOADING CSGO Server ###"
     su $DEPLOY_install_user_name --shell /bin/sh -c "$DEPLOY_steamCMD/steamcmd.sh +@sSteamCmdForcePlatformType linux +login anonymous +force_install_dir $tmp_dir/ +app_update 740 validate +quit" > $tmp_dir/log
     # Check install status
     if [[ $(cat $tmp_dir/log) = *"Success! App '740' fully installed."* ]] ; then
-        echo "CSGO Download success"
+        echo "### CSGO Download success ###"
     else
         rm -rf $tmp_dir
-        echo "CSGO Download failed retry..."
+        echo "### CSGO Download failed retry... ###"
          COUNTER=$((COUNTER +1))
              if [ $DEPLOY_retry == $COUNTER ]; then
-               echo "CSGO Download failed after $DEPLOY_retry attempts exiting..."
-            exit 1
+               echo "### ERROR: CSGO Download failed after $DEPLOY_retry attempts exiting... ###"
+                 exit 1
              fi 
        inst_vanilla_cs_srv
     fi
     # Move Folder
+    echo "### Move CSGO Server to inst dir ###"
     mv $tmp_dir/* $DEPLOY_server_inst_dir
     # Clean up
+    echo "### Clean TMP dir ###"
     rm -rf $tmp_dir
 }
 
@@ -95,7 +107,7 @@ curl -sqL $DEPLOY_sourcemod | tar zxvf - -C $DEPLOY_server_inst_dir/csgo/
 # Create Server CFG
 echo "### UPDATE Server CFG ###"
 if [ -a $DEPLOY_server_inst_dir/csgo/cfg/server.cfg ]; then
-    rm $DEPLOY_server_inst_dir/csgo/cfg/server.cfg
+    mv $DEPLOY_server_inst_dir/csgo/cfg/server.cfg $DEPLOY_server_inst_dir/csgo/cfg/server.cfg.old
 fi
 echo // Base Configuration >> $DEPLOY_server_inst_dir/csgo/cfg/server.cfg
 echo hostname $DEPLOY_hostname >> $DEPLOY_server_inst_dir/csgo/cfg/server.cfg
@@ -142,7 +154,7 @@ wget -P $DEPLOY_server_inst_dir/csgo/maps "http://fastdl.omg-network.de/csgo/csg
 wget -P $DEPLOY_server_inst_dir/csgo/maps "http://fastdl.omg-network.de/csgo/csgo/maps/aim_map.bsp"
 wget -P $DEPLOY_server_inst_dir/csgo/maps "http://fastdl.omg-network.de/csgo/csgo/maps/aim_prac_ak47.bsp"
 # Set permissions
-echo "### SET Permissions for $DEPLOY_install_user_name"
+echo "### SET Permissions for $DEPLOY_install_user_name ###"
 chown -cR $DEPLOY_install_user_name $DEPLOY_server_inst_dir && chmod -cR 770 $DEPLOY_server_inst_dir
 chmod +x $DEPLOY_server_inst_dir/srcds_run
 # Starting CSGO Server
@@ -152,12 +164,13 @@ screen -dmS CS_1vs1 su $DEPLOY_install_user_name --shell /bin/sh -c "$DEPLOY_ser
 
 function csgo_diegel ()
 {
+echo "### DOWNLOADING CSGO Maps ###"
 # Downloading aim_deagle7k
 wget -P $DEPLOY_server_inst_dir/csgo/maps "http://fastdl.omg-network.de/csgo/csgo/maps/aim_deagle7k.bsp"
 # Downloading only HS Plugin
 wget -P $DEPLOY_server_inst_dir/csgo/addons/sourcemod/plugins "https://raw.githubusercontent.com/Bara/OnlyHS/master/addons/sourcemod/plugins/onlyhs.smx"
 # Set permissions
-echo "### SET Permissions for $DEPLOY_install_user_name"
+echo "### SET Permissions for $DEPLOY_install_user_name ###"
 chown -cR $DEPLOY_install_user_name $DEPLOY_server_inst_dir && chmod -cR 770 $DEPLOY_server_inst_dir
 chmod +x $DEPLOY_server_inst_dir/srcds_run
 # Starting CSGO Server
@@ -169,7 +182,7 @@ screen -dmS CS_Diegle su $DEPLOY_install_user_name --shell /bin/sh -c "$DEPLOY_s
 function csgo_mm ()
 {
 # Set permissions
-echo "### SET Permissions for $DEPLOY_install_user_name"
+echo "### SET Permissions for $DEPLOY_install_user_name ###"
 chown -cR $DEPLOY_install_user_name $DEPLOY_server_inst_dir && chmod -cR 770 $DEPLOY_server_inst_dir
 chmod +x $DEPLOY_server_inst_dir/srcds_run
 # Starting CSGO Server
@@ -200,9 +213,7 @@ case "$DEPLOY_GAME_TYPE" in
     ;;
 
     *)
-     echo "ERROR: Wrong GAME_TYPE exiting..."
+     echo "### ERROR: Wrong GAME_TYPE exiting... ###"
     exit 1
 esac
-
-
 exit 0
