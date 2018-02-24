@@ -34,11 +34,11 @@ apt update && apt upgrade -y
     echo "### Install Requirements ###"
 apt install -y curl debconf libc6 lib32gcc1 curl screen wget gdb
     # Add i386
-    echo "### Add Arch i386 ###"
-    dpkg --add-architecture i386
-    apt update
-    echo "### Install i386 Libs ###"
-    apt install -y gcc-5-base:i386 gcc-6-base:i386 libc6:i386 libgcc1:i386 libstdc++6:i386
+    #echo "### Add Arch i386 ###"
+    #dpkg --add-architecture i386
+    #apt update
+    #echo "### Install i386 Libs ###"
+    #apt install -y gcc-5-base:i386 gcc-6-base:i386 libc6:i386 libgcc1:i386 libstdc++6:i386
     # Create User
     if [ ! -d $DEPLOY_server_inst_dir ]; then
         mkdir $DEPLOY_server_inst_dir
