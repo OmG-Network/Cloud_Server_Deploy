@@ -32,7 +32,7 @@ function inst_req ()
 apt update && apt upgrade -y
     # Install Req via APT
     echo "### Install Requirements ###"
-apt install -y curl debconf libc6 lib32gcc1 curl screen wget gdb
+apt install -y curl debconf libc6 lib32gcc1 lib32stdc++6 curl screen wget gdb
     # Add i386
     #echo "### Add Arch i386 ###"
     #dpkg --add-architecture i386
