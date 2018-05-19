@@ -95,15 +95,15 @@ function check_distro ()
 function inst_req ()
 {
     # System Update
-apt update && apt upgrade -y
+apt update && apt upgrade -y >/dev/null 2>&1
     # Install Req via APT
-apt install -y curl debconf libc6 lib32gcc1 lib32stdc++6 screen curl wget apache2 php libapache2-mod-php
+apt install -y curl debconf libc6 lib32gcc1 lib32stdc++6 screen curl wget apache2 php libapache2-mod-php >/dev/null 2>&1
     # Create User
     if [ ! -d $server_inst_dir ]; then
-        mkdir $server_inst_dir
+        mkdir $server_inst_dir >/dev/null 2>&1
     fi
     if [[ ! $(getent passwd $install_user_name) = *"$install_user_name"* ]]; then
-        useradd $install_user_name -d $server_inst_dir --shell /usr/sbin/nologin
+        useradd $install_user_name -d $server_inst_dir --shell /usr/sbin/nologin >/dev/null 2>&1
     fi
     # Download SteamCMD
  if [ -d $steamCMD ]; then
@@ -113,9 +113,9 @@ apt install -y curl debconf libc6 lib32gcc1 lib32stdc++6 screen curl wget apache
         curl -sqL "https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz" | tar zxvf - -C $steamCMD >/dev/null 2>&1
  fi
     # Set User rights
-    chown -cR $install_user_name $steamCMD && chmod -cR 770 $install_user_name $steamCMD
+    chown -cR $install_user_name $steamCMD && chmod -cR 770 $install_user_name $steamCMD >/dev/null 2>&1
     # Clean up
-apt-get autoclean -y
+apt-get autoclean -y >/dev/null 2>&1
 
 }
 
@@ -155,7 +155,7 @@ function init_fastdl ()
     fi
     # Create fastdl apache2 config file
     if [ -a /etc/apache2/sites-available/fastdl.conf ]; then
-        a2dissite fastdl.conf
+        a2dissite fastdl.conf >/dev/null 2>&1
         rm /etc/apache2/sites-available/fastdl.conf
     fi
     echo "<VirtualHost *:80>" >> /etc/apache2/sites-available/fastdl.conf
@@ -183,7 +183,7 @@ function init_fastdl ()
     echo "php_value post_max_size ${php_max_upload}M" >> /var/www/fastdl/upload/.htaccess
 
     # Deactivate Default apache2 conf
-    a2dissite 000-default.conf
+    a2dissite 000-default.conf >/dev/null 2>&1
     # Activate fastdl apache2 conf
     a2ensite fastdl
     # Restart apache2 server
@@ -192,7 +192,7 @@ function init_fastdl ()
     htpasswd -cbB /etc/apache2/.passwd $fastdl_user $fastdl_passwd
 
     # Create Upload PHP
-    wget -P /var/www/fastdl/upload/ "https://raw.githubusercontent.com/OmG-Network/Bash-Archiv/master/cloud_deploy/csgo_deploy/dependencies/index.php"
+    wget -P /var/www/fastdl/upload/ "https://raw.githubusercontent.com/OmG-Network/Bash-Archiv/master/cloud_deploy/csgo_deploy/dependencies/index.php" >/dev/null 2>&1
     sed -i "s/{MAP_FOLDER_PATH}/${server_inst_dir//\//\\/}\/csgo\/maps\//g" /var/www/fastdl/upload/index.php
 
     # Link Map folder
@@ -210,10 +210,10 @@ function csgo_srv_init ()
 # Inst Metamod & Sourcemod
 # Metamod
 echo "### INST Metamod ###"
-curl -sqL $metamod | tar zxvf - -C $server_inst_dir/csgo/
+curl -sqL $metamod | tar zxvf - -C $server_inst_dir/csgo/ >/dev/null 2>&1
 # Sourcemod
 echo "### INST Sourcemod ###"
-curl -sqL $sourcemod | tar zxvf - -C $server_inst_dir/csgo/
+curl -sqL $sourcemod | tar zxvf - -C $server_inst_dir/csgo/ >/dev/null 2>&1
 # Update Config
 # Create Server CFG
 echo "### UPDATE Server CFG ###"
@@ -257,20 +257,20 @@ function srv_permission ()
 {
     # Set permissions
     echo "### SET Permissions for $install_user_name"
-    chown -cR $install_user_name:www-data $server_inst_dir && chmod -cR 775 $server_inst_dir    
-    chmod +x $server_inst_dir/srcds_run
+    chown -cR $install_user_name:www-data $server_inst_dir && chmod -cR 775 $server_inst_dir >/dev/null 2>&1  
+    chmod +x $server_inst_dir/srcds_run >/dev/null 2>&1
 }
 
 function csgo_1vs1 ()
 {
 # Download Maps
 echo "### DOWNLOADING CSGO Maps ###"
-wget -P $server_inst_dir/csgo/maps "http://fastdl.omg-network.de/csgo/csgo/maps/aim_redline.bsp"
-wget -P $server_inst_dir/csgo/maps "http://fastdl.omg-network.de/csgo/csgo/maps/aim_dust2.bsp"
-wget -P $server_inst_dir/csgo/maps "http://fastdl.omg-network.de/csgo/csgo/maps/aim_map_classic.bsp"
-wget -P $server_inst_dir/csgo/maps "http://fastdl.omg-network.de/csgo/csgo/maps/aim_dust_go.bsp"
-wget -P $server_inst_dir/csgo/maps "http://fastdl.omg-network.de/csgo/csgo/maps/aim_map.bsp"
-wget -P $server_inst_dir/csgo/maps "http://fastdl.omg-network.de/csgo/csgo/maps/aim_prac_ak47.bsp"
+wget -P $server_inst_dir/csgo/maps "http://fastdl.omg-network.de/csgo/csgo/maps/aim_redline.bsp" >/dev/null 2>&1
+wget -P $server_inst_dir/csgo/maps "http://fastdl.omg-network.de/csgo/csgo/maps/aim_dust2.bsp" >/dev/null 2>&1
+wget -P $server_inst_dir/csgo/maps "http://fastdl.omg-network.de/csgo/csgo/maps/aim_map_classic.bsp" >/dev/null 2>&1
+wget -P $server_inst_dir/csgo/maps "http://fastdl.omg-network.de/csgo/csgo/maps/aim_dust_go.bsp" >/dev/null 2>&1
+wget -P $server_inst_dir/csgo/maps "http://fastdl.omg-network.de/csgo/csgo/maps/aim_map.bsp" >/dev/null 2>&1
+wget -P $server_inst_dir/csgo/maps "http://fastdl.omg-network.de/csgo/csgo/maps/aim_prac_ak47.bsp" >/dev/null 2>&1
 #Set permissions
 srv_permission
 # Starting CSGO Server
@@ -281,9 +281,9 @@ screen -dmS CS_1vs1 su $install_user_name --shell /bin/sh -c "$server_inst_dir/s
 function csgo_diegel ()
 {
 # Downloading aim_deagle7k
-wget -P $server_inst_dir/csgo/maps "http://fastdl.omg-network.de/csgo/csgo/maps/aim_deagle7k.bsp"
+wget -P $server_inst_dir/csgo/maps "http://fastdl.omg-network.de/csgo/csgo/maps/aim_deagle7k.bsp" >/dev/null 2>&1
 # Downloading only HS Plugin
-wget -P $server_inst_dir/csgo/addons/sourcemod/plugins "https://raw.githubusercontent.com/Bara/OnlyHS/master/addons/sourcemod/plugins/onlyhs.smx"
+wget -P $server_inst_dir/csgo/addons/sourcemod/plugins "https://raw.githubusercontent.com/Bara/OnlyHS/master/addons/sourcemod/plugins/onlyhs.smx" >/dev/null 2>&1
 #Set permissions
 srv_permission
 # Starting CSGO Server
@@ -328,5 +328,4 @@ case "$GAME_TYPE" in
      echo "ERROR: Wrong GAME_TYPE exiting..."
     exit 1
 esac
-
 exit 0
