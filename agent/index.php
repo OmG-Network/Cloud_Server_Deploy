@@ -83,6 +83,7 @@ switch ($_GET['GAME']){
     $ipv4 = $_GET['ip'];
 
     // Start Download
+    steamCMD();
     shell_exec('mkdir /opt/csgo');
     liveExecuteCommand('/opt/steamcmd/steamcmd.sh +@sSteamCmdForcePlatformType linux +login anonymous +force_install_dir /opt/csgo +app_update 740 validate +quit');
 
