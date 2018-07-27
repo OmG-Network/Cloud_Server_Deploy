@@ -4,7 +4,7 @@ if(!isset($_GET['key'])){
     die("<h1>Hier gibts nix zu sehen, bitte gehen sie weiter.</h1>");
 }
 
-if ($_GET['key'] != "1337"){
+if ($_GET['key'] != "AUTHKEY"){
     die("ERROR: Falscher Key !");
 }
 
