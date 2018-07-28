@@ -18,7 +18,7 @@ steamCMD=/opt/steamcmd
 server_inst_dir=/opt/server
 retry=5
 LSB=$($(which lsb_release) -si)
-WAN_IP=$(curl ipinfo.io/ip)
+WAN_IP=$($(which curl) ipinfo.io/ip >/dev/null 2>&1)
 
 # Matching Table
 #
@@ -82,10 +82,10 @@ function csgo_srv_init ()
 # Inst Metamod & Sourcemod
 # Metamod
 echo "### INST Metamod ###"
-curl -sqL $metamod | tar zxvf - -C $server_inst_dir/csgo/
+curl -sqL $metamod | tar zxvf - -C $server_inst_dir/csgo/ >/dev/null 2>&1
 # Sourcemod
 echo "### INST Sourcemod ###"
-curl -sqL $sourcemod | tar zxvf - -C $server_inst_dir/csgo/
+curl -sqL $sourcemod | tar zxvf - -C $server_inst_dir/csgo/ >/dev/null 2>&1
 # Update Config
 # Create Server CFG
 echo "### UPDATE Server CFG ###"
@@ -122,19 +122,19 @@ echo mp_match_end_restart 1 >> $server_inst_dir/csgo/cfg/server.cfg
 
 # Add ESL Config files
 echo "### ADD ESL Config ###"
-curl -sqL $esl_cfg | tar xf - -C $server_inst_dir/csgo/cfg/
+curl -sqL $esl_cfg | tar xf - -C $server_inst_dir/csgo/cfg/ >/dev/null 2>&1
 }
 
 function csgo_1vs1 ()
 {
 # Download Maps
 echo "### DOWNLOADING CSGO Maps ###"
-wget -P $server_inst_dir/csgo/maps "http://fastdl.omg-network.de/csgo/csgo/maps/aim_redline.bsp"
-wget -P $server_inst_dir/csgo/maps "http://fastdl.omg-network.de/csgo/csgo/maps/aim_dust2.bsp"
-wget -P $server_inst_dir/csgo/maps "http://fastdl.omg-network.de/csgo/csgo/maps/aim_map_classic.bsp"
-wget -P $server_inst_dir/csgo/maps "http://fastdl.omg-network.de/csgo/csgo/maps/aim_dust_go.bsp"
-wget -P $server_inst_dir/csgo/maps "http://fastdl.omg-network.de/csgo/csgo/maps/aim_map.bsp"
-wget -P $server_inst_dir/csgo/maps "http://fastdl.omg-network.de/csgo/csgo/maps/aim_prac_ak47.bsp"
+wget -P $server_inst_dir/csgo/maps "http://fastdl.omg-network.de/csgo/csgo/maps/aim_redline.bsp" >/dev/null 2>&1
+wget -P $server_inst_dir/csgo/maps "http://fastdl.omg-network.de/csgo/csgo/maps/aim_dust2.bsp" >/dev/null 2>&1
+wget -P $server_inst_dir/csgo/maps "http://fastdl.omg-network.de/csgo/csgo/maps/aim_map_classic.bsp" >/dev/null 2>&1
+wget -P $server_inst_dir/csgo/maps "http://fastdl.omg-network.de/csgo/csgo/maps/aim_dust_go.bsp" >/dev/null 2>&1
+wget -P $server_inst_dir/csgo/maps "http://fastdl.omg-network.de/csgo/csgo/maps/aim_map.bsp" >/dev/null 2>&1
+wget -P $server_inst_dir/csgo/maps "http://fastdl.omg-network.de/csgo/csgo/maps/aim_prac_ak47.bsp" >/dev/null 2>&1
 # Starting CSGO Server
 echo "### STARTING CSGO Server ###"
 $server_inst_dir/srcds_run -game csgo -console -usercon -tickrate 128 -maxplayers 10 -nobots -ip 0.0.0.0 -pingboost 3 +game_type 0 +game_mode 0 +map aim_redline +exec server.cfg &
@@ -143,9 +143,9 @@ $server_inst_dir/srcds_run -game csgo -console -usercon -tickrate 128 -maxplayer
 function csgo_diegel ()
 {
 # Downloading aim_deagle7k
-wget -P $server_inst_dir/csgo/maps "http://fastdl.omg-network.de/csgo/csgo/maps/aim_deagle7k.bsp"
+wget -P $server_inst_dir/csgo/maps "http://fastdl.omg-network.de/csgo/csgo/maps/aim_deagle7k.bsp" >/dev/null 2>&1
 # Downloading only HS Plugin
-wget -P $server_inst_dir/csgo/addons/sourcemod/plugins "https://raw.githubusercontent.com/Bara/OnlyHS/master/addons/sourcemod/plugins/onlyhs.smx"
+wget -P $server_inst_dir/csgo/addons/sourcemod/plugins "https://raw.githubusercontent.com/Bara/OnlyHS/master/addons/sourcemod/plugins/onlyhs.smx" >/dev/null 2>&1
 # Starting CSGO Server
 echo "### STARTING CSGO Server ###"
 $server_inst_dir/srcds_run -game csgo -console -usercon -tickrate 128 -maxplayers 10 -nobots -ip 0.0.0.0 -pingboost 3 +game_type 0 +game_mode 1 +map aim_deagle7k +exec server.cfg &
