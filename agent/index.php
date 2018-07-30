@@ -1,10 +1,10 @@
 <?php
 
-if(!isset($_GET['key'])){
+if(!isset($_POST['key'])){
     die("<h1>Hier gibts nix zu sehen, bitte gehen sie weiter.</h1>");
 }
 
-if ($_GET['key'] != "AUTHKEY"){
+if ($_POST['key'] != "AUTHKEY"){
     die("ERROR: Falscher Key !");
 }
 
@@ -28,7 +28,7 @@ function liveExecuteCommand($cmd)
 
     pclose($proc);
 
-    // get exit status
+    // POST exit status
     preg_match('/[0-9]+$/', $complete_output, $matches);
 
     // return exit status and intended output
@@ -38,17 +38,17 @@ function liveExecuteCommand($cmd)
                  );
 }
 
-switch ($_GET['GAME']){
+switch ($_POST['GAME']){
     case "CSGO":
     // Game Settings
-    $gtype = $_GET['game_type'];
-    $ghostname = $_GET['hostname'];
-    $gsvpass = $_GET['sv_password'];
-    $grcon = $_GET['rcon_password'];
-    $gtoken = $_GET['sv_setsteamaccount'];
+    $gtype = $_POST['game_type'];
+    $ghostname = $_POST['hostname'];
+    $gsvpass = $_POST['sv_password'];
+    $grcon = $_POST['rcon_password'];
+    $gtoken = $_POST['sv_setsteamaccount'];
     
     // Start Download
-    liveExecuteCommand('install_csgo.sh -a '.$gtype.' -b '.$ghostname.' -c '.$gsvpass.' -d '.$grcon.' -e '.$gtoken.'');
+    liveExecuteCommand('/opt/install_csgo.sh -a '.$gtype.' -b '.$ghostname.' -c '.$gsvpass.' -d '.$grcon.' -e '.$gtoken.'');
 
 }
 
