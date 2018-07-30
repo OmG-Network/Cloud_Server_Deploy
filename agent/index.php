@@ -9,7 +9,7 @@ if ($_POST['key'] != "AUTHKEY"){
 }
 
 switch ($_POST['game']){
-    case "CSGO":
+    case "csgo":
     // Game Settings
     $gtype = $_POST['game_type'];
     $ghostname = $_POST['hostname'];
