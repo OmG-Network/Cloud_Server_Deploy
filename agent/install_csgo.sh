@@ -61,6 +61,7 @@ function inst_vanilla_cs_srv ()
     fi
     # Download CSGO Server
     echo "### DOWNLOADING CSGO Server ###"
+    curl -sqL "http://fastdl.omg-network.de/csgo/csgo.tar.gz" | tar zxvf - -C $server_inst_dir >/dev/null 2>&1
     $steamCMD/steamcmd.sh +@sSteamCmdForcePlatformType linux +login anonymous +force_install_dir $server_inst_dir/ +app_update 740 validate +quit > $server_inst_dir/log
     # Check install status
     if [[ $(cat $server_inst_dir/log) = *"Success! App '740' fully installed."* ]] ; then
