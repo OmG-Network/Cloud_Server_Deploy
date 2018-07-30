@@ -33,10 +33,10 @@ while getopts a:b:c:d:e: opt
 do
    case $opt in
        a) GAME_TYPE=$OPTARG;;
-       b) hostname=$OPTARG;;
-       c) sv_password=$OPTARG;;
-       d) rcon_password=$OPTARG;;
-       e) sv_setsteamaccount=$OPTARG;;
+       b) hostname="$OPTARG";;
+       c) sv_password="$OPTARG";;
+       d) rcon_password="$OPTARG";;
+       e) sv_setsteamaccount="$OPTARG";;
    esac
 done
 
