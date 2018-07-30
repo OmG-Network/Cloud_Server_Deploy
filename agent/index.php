@@ -38,7 +38,7 @@ function liveExecuteCommand($cmd)
                  );
 }
 
-switch ($_POST['GAME']){
+switch ($_POST['game']){
     case "CSGO":
     // Game Settings
     $gtype = $_POST['game_type'];
