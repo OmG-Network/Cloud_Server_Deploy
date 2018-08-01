@@ -18,7 +18,7 @@ switch ($_POST['game']){
     $gtoken = $_POST['sv_setsteamaccount'];
     
     // Start Download
-    exec('bash -c "exec nohup setsid /opt/install_csgo.sh -a '.$gtype.' -b "'.$ghostname.'" -c "'.$gsvpass.'" -d "'.$grcon.'" -e "'.$gtoken.'" > /dev/null 2>&1 &"');
+    exec('/opt/install_csgo.sh -a '.$gtype.' -b "'.$ghostname.'" -c "'.$gsvpass.'" -d "'.$grcon.'" -e "'.$gtoken.'" >/dev/null 2>&1 &"');
     echo "Installation Started";
 
 }
