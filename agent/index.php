@@ -89,7 +89,7 @@ if(isset($_POST['power'])){
                             exec('/opt/steamcmd/steamcmd.sh +@sSteamCmdForcePlatformType linux +login anonymous +force_install_dir /opt/server +app_update 740 validate +quit >/dev/null 2>&1 && /opt/server/srcds_run -game csgo -console -usercon -tickrate 128 -maxplayers 10 -nobots -ip 0.0.0.0 -pingboost 3 +game_type 0 +game_mode 1 +map de_cbble +exec server.cfg >/dev/null 2>&1 &');
                             exit();
                         default:
-                            die("ERROR: On Deagle Power Switch");
+                            die("ERROR: On MM Power Switch");
                     }
                     
             }
