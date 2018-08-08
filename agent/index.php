@@ -41,6 +41,11 @@ if(isset($_POST['power'])){
                             sleep(3);
                             exec('/opt/server/srcds_run -game csgo -console -usercon -tickrate 128 -maxplayers 10 -nobots -ip 0.0.0.0 -pingboost 3 +game_type 0 +game_mode 0 +map aim_redline +exec server.cfg >/dev/null 2>&1 &');
                             exit();
+                        case "update":
+                            exec('killall -TERM srcds_linux >/dev/null 2>&1 &');
+                            sleep(3);
+                            exec('/opt/steamcmd/steamcmd.sh +@sSteamCmdForcePlatformType linux +login anonymous +force_install_dir /opt/server +app_update 740 validate +quit >/dev/null 2>&1 && /opt/server/srcds_run -game csgo -console -usercon -tickrate 128 -maxplayers 10 -nobots -ip 0.0.0.0 -pingboost 3 +game_type 0 +game_mode 0 +map aim_redline +exec server.cfg >/dev/null 2>&1 &');
+                            exit();
                         default:
                             die("ERROR: On 1vs1 Power Switch");
                     }
@@ -57,6 +62,11 @@ if(isset($_POST['power'])){
                             sleep(3);
                             exec('/opt/server/srcds_run -game csgo -console -usercon -tickrate 128 -maxplayers 10 -nobots -ip 0.0.0.0 -pingboost 3 +game_type 0 +game_mode 1 +map aim_deagle7k +exec server.cfg >/dev/null 2>&1 &');
                             exit();
+                        case "update":
+                            exec('killall -TERM srcds_linux >/dev/null 2>&1 &');
+                            sleep(3);
+                            exec('/opt/steamcmd/steamcmd.sh +@sSteamCmdForcePlatformType linux +login anonymous +force_install_dir /opt/server +app_update 740 validate +quit >/dev/null 2>&1 && /opt/server/srcds_run -game csgo -console -usercon -tickrate 128 -maxplayers 10 -nobots -ip 0.0.0.0 -pingboost 3 +game_type 0 +game_mode 1 +map aim_deagle7k +exec server.cfg >/dev/null 2>&1 &');
+                            exit();
                         default:
                             die("ERROR: On Deagle Power Switch");
                     }
@@ -72,6 +82,11 @@ if(isset($_POST['power'])){
                             exec('killall -TERM srcds_linux >/dev/null 2>&1 &');
                             sleep(3);
                             exec('/opt/server/srcds_run -game csgo -console -usercon -tickrate 128 -maxplayers 10 -nobots -ip 0.0.0.0 -pingboost 3 +game_type 0 +game_mode 1 +map de_cbble +exec server.cfg >/dev/null 2>&1 &');
+                            exit();
+                        case "update":
+                            exec('killall -TERM srcds_linux >/dev/null 2>&1 &');
+                            sleep(3);
+                            exec('/opt/steamcmd/steamcmd.sh +@sSteamCmdForcePlatformType linux +login anonymous +force_install_dir /opt/server +app_update 740 validate +quit >/dev/null 2>&1 && /opt/server/srcds_run -game csgo -console -usercon -tickrate 128 -maxplayers 10 -nobots -ip 0.0.0.0 -pingboost 3 +game_type 0 +game_mode 1 +map de_cbble +exec server.cfg >/dev/null 2>&1 &');
                             exit();
                         default:
                             die("ERROR: On Deagle Power Switch");
